@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width,
+                 initial-scale=1.0,
+                 maximum-scale=1.0,
+                 user-scalable=no">
+
+    <title>MENU</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* KHU VỰC SLIDER */
+        .slider {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+
+            overflow-x: scroll;
+            overflow-y: hidden;
+
+            scroll-snap-type: x mandatory;
+
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* MỖI TRANG */
+        .slide {
+            flex: 0 0 100%;
+
+            width: 100%;
+            height: 100%;
+
+            scroll-snap-align: start;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            position: relative;
+        }
+
+        /* ẢNH */
+        .slide img {
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+        }
+
+        /* THÔNG BÁO KHI ẢNH LỖI */
+        .error {
+            color: white;
+
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+        /* CÁC CHẤM */
+        .dots {
+            position: fixed;
+
+            bottom: 15px;
+            left: 0;
+
+            width: 100%;
+
+            text-align: center;
+
+            z-index: 10;
+        }
+
+        .dot {
+            display: inline-block;
+
+            width: 8px;
+            height: 8px;
+
+            margin: 4px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.45);
+
+            transition: 0.2s;
+        }
+
+        .dot.active {
+            background: white;
+
+            transform: scale(1.25);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         CÁC TRANG
+    ========================= -->
+
+    <div class="slider" id="slider">
+
+        <div class="slide">
+            <img src="1.jpg" alt="Page 1">
+        </div>
+
+        <div class="slide">
+            <img src="2.jpg" alt="Page 2">
+        </div>
+
+        <div class="slide">
+            <img src="3.jpg" alt="Page 3">
+        </div>
+
+        <div class="slide">
+            <img src="4.jpg" alt="Page 4">
+        </div>
+
+        <div class="slide">
+            <img src="5.jpg" alt="Page 5">
+        </div>
+
+        <div class="slide">
+            <img src="6.jpg" alt="Page 6">
+        </div>
+
+        <div class="slide">
+            <img src="7.jpg" alt="Page 7">
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         CHẤM CHỈ BÁO
+    ========================= -->
+
+    <div class="dots" id="dots">
+
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+       
+
+    </div>
+
+
+    <script>
+        const slider = document.getElementById("slider");
+
+        const dots = document.querySelectorAll(".dot");
+
+        const slides = document.querySelectorAll(".slide");
+
+
+        /* =========================
+           KIỂM TRA ẢNH
+        ========================= */
+
+        document.querySelectorAll(".slide img").forEach(function (img, index) {
+
+            img.addEventListener("error", function () {
+
+                console.error("Không thể tải ảnh:", img.src);
+
+                img.style.display = "none";
+
+                const message = document.createElement("div");
+
+                message.className = "error";
+
+                message.innerHTML =
+                    "Không thể tải ảnh " +
+                    (index + 1) +
+                    ".jpg<br><br>" +
+                    "Hãy kiểm tra tên file và vị trí file.";
+
+                img.parentElement.appendChild(message);
+            });
+
+        });
+
+
+        /* =========================
+           CẬP NHẬT CHẤM
+        ========================= */
+
+        slider.addEventListener("scroll", function () {
+
+            const page = Math.round(
+                slider.scrollLeft / slider.clientWidth
+            );
+
+            dots.forEach(function (dot, index) {
+
+                dot.classList.toggle(
+                    "active",
+                    index === page
+                );
+
+            });
+
+        });
+
+
+        /* =========================
+           CLICK VÀO CHẤM
+        ========================= */
+
+        dots.forEach(function (dot, index) {
+
+            dot.addEventListener("click", function () {
+
+                slider.scrollTo({
+
+                    left: index * slider.clientWidth,
+
+                    behavior: "smooth"
+
+                });
+
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
